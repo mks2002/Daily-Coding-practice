@@ -1,0 +1,7 @@
+what is the main difference between top down (recursion or memoiazation)  and bottom up ( tabulation) ----->
+
+in recursion(top down) ---->
+ we start from the bigger problem and try to solve this by solving the smaller problems , i.e it is basically is to break the bigger problem into smaller problems and then try to find the solution.
+
+but in tabulation(bottom up) ---->
+ we start from the smaller problem and by merging it we try to find the solution of the bigger problem...

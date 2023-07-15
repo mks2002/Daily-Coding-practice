@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "map": "cpp",
+        "iostream": "cpp",
+        "ostream": "cpp",
+        "random": "cpp",
+        "iosfwd": "cpp",
+        "sstream": "cpp",
+        "regex": "cpp",
+        "vector": "cpp",
+        "tuple": "cpp"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "python.formatting.provider": "none"
+}
