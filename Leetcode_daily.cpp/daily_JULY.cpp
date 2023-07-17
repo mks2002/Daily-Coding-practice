@@ -257,6 +257,7 @@ int largestVariance(string s)
                 {
                     cnt1 += (it == c1);
                     cnt2 += (it == c2);
+
                     // we dont have to break and take cnt1, cnt2 forward same as kadanes algorithm.....
                     if (cnt1 < cnt2)
                         cnt1 = cnt2 = 0;
@@ -381,4 +382,109 @@ int longestSubsequence(vector<int> &arr, int difference)
         mxlen = max(mxlen, m[it]);
     }
     return mxlen;
+}
+
+// maximum number of events that can be attended 2....
+int solve(vector<vector<int>> &dp, vector<vector<int>> &events, int n, int pos, int k)
+{
+    if (pos >= n || k == 0)
+        return 0;
+    if (dp[pos][k] != -1)
+        return dp[pos][k];
+    int i;
+    vector<int> temp = {events[pos][1], INT_MAX, INT_MAX};
+    i = upper_bound(events.begin() + pos + 1, events.end(), temp) - events.begin();
+    return dp[pos][k] = max(solve(dp, events, n, pos + 1, k), events[pos][2] + solve(dp, events, n, i, k - 1));
+}
+int maxValue(vector<vector<int>> &events, int k)
+{
+    int n = events.size();
+    sort(events.begin(), events.end());
+    vector<vector<int>> dp(n + 1, vector<int>(k + 1, -1));
+    return solve(dp, events, n, 0, k);
+}
+
+struct ListNode
+{
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+ListNode *reverse(ListNode *&head)
+{
+    ListNode *currptr = head, *prevptr = NULL;
+    ListNode *nextptr;
+    while (currptr != NULL)
+    {
+        nextptr = prevptr;
+        prevptr = currptr;
+        currptr = currptr->next;
+        prevptr->next = nextptr;
+    }
+    return prevptr;
+}
+ListNode *helperadd(ListNode *l1, ListNode *l2)
+{
+    ListNode *l3 = new ListNode(-1);
+    ListNode *head = l3;
+    int carry = 0;
+    while (l1 != NULL and l2 != NULL)
+    {
+        int value = l1->val + l2->val + carry;
+        carry = value / 10;
+        value = value % 10;
+        l3->next = new ListNode(value);
+
+        l1 = l1->next;
+        l2 = l2->next;
+        l3 = l3->next;
+    }
+
+    while (l1 != NULL)
+    {
+        int value = l1->val + carry;
+        carry = value / 10;
+        value = value % 10;
+        l3->next = new ListNode(value);
+
+        l3 = l3->next;
+        l1 = l1->next;
+    }
+
+    while (l2 != NULL)
+    {
+        int value = l2->val + carry;
+        carry = value / 10;
+        value = value % 10;
+        l3->next = new ListNode(value);
+
+        l3 = l3->next;
+        l2 = l2->next;
+    }
+
+    while (carry != 0)
+    {
+        int value = carry;
+        carry = value / 10;
+        value = value % 10;
+        l3->next = new ListNode(value);
+        l3 = l3->next;
+    }
+    return head->next;
+}
+
+ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
+{
+    l1 = reverse(l1);
+    l2 = reverse(l2);
+    ListNode *ans = helperadd(l1, l2);
+
+    // reverse all the linked list again.....
+    ans = reverse(ans);
+    l1 = reverse(l1);
+    l2 = reverse(l2);
+    return ans;
 }

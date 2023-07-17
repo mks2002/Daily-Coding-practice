@@ -1,8 +1,16 @@
-// { Driver Code Starts
-//Initial Template for C++
-
 #include <bits/stdc++.h>
 using namespace std;
+#define int long long int
+#define rep(i, a, b) for (int i = a; i < b; i++)
+#define vi vector<int>
+#define vvi vector<vector<int>>
+#define pi pair<int, int>
+#define vpi vector<pair<int, int>>
+#define mii map<int, int>
+#define pb push_back
+#define __mayuk                       \
+    ios_base::sync_with_stdio(false); \
+    cin.tie(NULL);
 
 struct Node
 {
@@ -28,149 +36,55 @@ void printInorder(Node *node)
     cout << node->data << " ";
     printInorder(node->right);
 }
-Node *buildTree(string str)
+
+int32_t main()
 {
-    // Corner Case
-    if (str.length() == 0 || str[0] == 'N')
-        return NULL;
-
-    // Creating vector of strings from input
-    // string after spliting by space
-    vector<string> ip;
-
-    istringstream iss(str);
-    for (string str; iss >> str;)
-        ip.push_back(str);
-
-    // Create the root of the tree
-    Node *root = new Node(stoi(ip[0]));
-
-    // Push the root to the queue
-    queue<Node *> queue;
-    queue.push(root);
-
-    // Starting from the second element
-    int i = 1;
-    while (!queue.empty() && i < ip.size())
-    {
-
-        // Get and remove the front of the queue
-        Node *currNode = queue.front();
-        queue.pop();
-
-        // Get the current node's value from the string
-        string currVal = ip[i];
-
-        // If the left child is not null
-        if (currVal != "N")
-        {
-
-            // Create the left child for the current Node
-            currNode->left = new Node(stoi(currVal));
-
-            // Push it to the queue
-            queue.push(currNode->left);
-        }
-
-        // For the right child
-        i++;
-        if (i >= ip.size())
-            break;
-        currVal = ip[i];
-
-        // If the right child is not null
-        if (currVal != "N")
-        {
-
-            // Create the right child for the current node
-            currNode->right = new Node(stoi(currVal));
-
-            // Push it to the queue
-            queue.push(currNode->right);
-        }
-        i++;
-    }
-
-    return root;
-}
-
-
- // } Driver Code Ends
-//User function Template for C++
-
-/*
-structure of the node of the binary tree is as
-struct Node
-{
-    int data;
-    struct Node *left;
-    struct Node *right;
-
-    Node(int x)
-    {
-        data = x;
-        left = NULL;
-        right = NULL;
-    }
-};
-*/
-class Solution
-{
-public:
-    
-    void solve(Node* root, int sum, int &maxSum, int len, int &maxLen) {
-        //base case
-        if( root == NULL ) {
-            
-            if(len > maxLen) 
-            {
-                maxLen = len;
-                maxSum = sum;
-            }
-            else if(len == maxLen) 
-            {
-                maxSum = max(sum, maxSum);
-            }
-            return;
-        }
-        
-        sum = sum + root->data;
-        
-        solve(root->left, sum, maxSum, len+1, maxLen);
-        solve(root->right, sum, maxSum, len+1, maxLen);
-
-    }
-    
-    int sumOfLongRootToLeafPath(Node *root)
-    {
-        int len = 0;
-        int maxLen = 0;
-        
-        int sum = 0;
-        int maxSum = INT_MIN;
-        
-        solve(root, sum, maxSum, len, maxLen);
-        
-        return maxSum;
-    }
-};
-
-// { Driver Code Starts.
-
-int main()
-{
-
+    __mayuk;
     int t;
-    scanf("%d", &t);
-    cin.ignore();
+    cin >> t;
     while (t--)
     {
-        string treeString;
-        getline(cin, treeString);
-        Node *root = buildTree(treeString);
-        Solution obj;
-        int res = obj.sumOfLongRootToLeafPath(root);
-        cout << res << "\n";
     }
     return 0;
-}  // } Driver Code Ends
+}
+
+void solve(Node *root, int sum, int &maxSum, int len, int &maxLen)
+{
+    // base case
+    if (root == NULL)
+    {
+
+        if (len > maxLen)
+        {
+            maxLen = len;
+            maxSum = sum;
+        }
+        else if (len == maxLen)
+        {
+            maxSum = max(sum, maxSum);
+        }
+
+        // if the current length is less then the maxlen then we dont need to care about that condition because we need tht max path length sum .....
+        return;
+    }
+
+    sum = sum + root->data;
+
+    solve(root->left, sum, maxSum, len + 1, maxLen);
+    solve(root->right, sum, maxSum, len + 1, maxLen);
+}
+
+int sumOfLongRootToLeafPath(Node *root)
+{
+    int len = 0;
+    int maxLen = 0;
+
+    int sum = 0;
+    int maxSum = INT_MIN;
+
+    solve(root, sum, maxSum, len, maxLen);
+
+    return maxSum;
+}
+
+// time complexity --> O(n)  space complexity --> O(height )........

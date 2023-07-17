@@ -97,6 +97,42 @@ int numberOfPaths(vector<vector<int>> &grid, int k)
 
 
 
+
+/*
+// another way to write the same recursive code just changing the initial values.....
+// this is wrong approach becuase here we without knowing the current value of (i-1) or (j-1) we directly try to access grid[i-1][j-1] so it will give error....
+int helper(int i, int j, int pathsum, int k, vector<vector<int>> &grid)
+{
+    if (i < 0 or j < 0)
+        return 0;
+    if (i == 0 and j == 0)
+    {
+        if (pathsum % k == 0)
+            return 1;
+        else
+            return 0;
+    }
+
+    int up = helper(i - 1, j, pathsum + grid[i-1][j], k, grid);
+    int left = helper(i, j - 1, pathsum + grid[i][j-1], k, grid);
+
+    int ans = up + left;
+    return ans;
+}
+
+int numberOfPaths(vector<vector<int>> &grid, int k)
+{
+    int n = grid.size(), m = grid[0].size();
+    int pathsum = grid[n-1][m-1];
+    int ans = helper(n - 1, m - 1, pathsum, k, grid);
+    return ans;
+}
+
+*/
+
+
+
+
 // this tabulation code gives wrong answer for 1 sample test case.....
 int numberOfPaths(vector<vector<int>> &grid, int k)
 {
@@ -133,35 +169,3 @@ int numberOfPaths(vector<vector<int>> &grid, int k)
     }
     return dp[n - 1][m - 1][0];
 }
-
-/*
-// another way to write the same recursive code just changing the initial values.....
-// this is wrong approach becuase here we without knowing the current value of (i-1) or (j-1) we directly try to access grid[i-1][j-1] so it will give error....
-int helper(int i, int j, int pathsum, int k, vector<vector<int>> &grid)
-{
-    if (i < 0 or j < 0)
-        return 0;
-    if (i == 0 and j == 0)
-    {
-        if (pathsum % k == 0)
-            return 1;
-        else
-            return 0;
-    }
-
-    int up = helper(i - 1, j, pathsum + grid[i-1][j], k, grid);
-    int left = helper(i, j - 1, pathsum + grid[i][j-1], k, grid);
-
-    int ans = up + left;
-    return ans;
-}
-
-int numberOfPaths(vector<vector<int>> &grid, int k)
-{
-    int n = grid.size(), m = grid[0].size();
-    int pathsum = grid[n-1][m-1];
-    int ans = helper(n - 1, m - 1, pathsum, k, grid);
-    return ans;
-}
-
-*/

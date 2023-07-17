@@ -918,3 +918,98 @@ int numEnclaves(vector<vector<int>> &grid)
    }
    return cnt;
 }
+
+// no of closed islands.......
+
+void bfs(int row, int col, vector<vector<int>> &grid, vector<vector<int>> &vis, vector<int> &r, vector<int> &c)
+{
+   int n = grid.size(), m = grid[0].size();
+   queue<pair<int, int>> q;
+
+   vis[row][col] = 1;
+   q.push({row, col});
+   while (!q.empty())
+   {
+      int currrow = q.front().first;
+      int currcol = q.front().second;
+      q.pop();
+
+      for (int i = 0; i < 4; i++)
+      {
+         int newrow = currrow + r[i];
+         int newcol = currcol + c[i];
+
+         if (newrow >= 0 and newrow < n and newcol >= 0 and newcol < m and grid[newrow][newcol] == 0 and vis[newrow][newcol] == 0)
+         {
+            vis[newrow][newcol] = 1;
+            q.push({newrow, newcol});
+         }
+      }
+   }
+}
+
+
+void dfs(int row, int col, vector<vector<int>> &grid, vector<vector<int>> &vis, vector<int> &r, vector<int> &c)
+{
+   int n = grid.size(), m = grid[0].size();
+   vis[row][col] = 1;
+   for (int i = 0; i < 4; i++)
+   {
+      int newrow = row + r[i];
+      int newcol = col + c[i];
+      if (newrow >= 0 and newrow < n and newcol >= 0 and newcol < m and grid[newrow][newcol] == 0 and vis[newrow][newcol] == 0)
+      {
+         dfs(newrow, newcol, grid, vis, r, c);
+      }
+   }
+}
+
+int closedIsland(vector<vector<int>> &grid)
+{
+   int n = grid.size(), m = grid[0].size();
+
+   vector<vector<int>> vis(n, vector<int>(m, 0));
+   // for all cells whose values are 1 for that we have to make our visited array also 1 .....
+   for (int i = 0; i < n; i++)
+   {
+      for (int j = 0; j < m; j++)
+      {
+         if (grid[i][j] == 1)
+            vis[i][j] = 1;
+      }
+   }
+
+   vector<int> r = {0, -1, 0, 1};
+   vector<int> c = {-1, 0, 1, 0};
+
+   for (int i = 0; i < n; i++)
+   {
+      for (int j = 0; j < m; j++)
+      {
+         if (i == 0 or i == n - 1 or j == 0 or j == m - 1)
+         {
+            if (grid[i][j] == 0)
+            {
+               dfs(i, j, grid, vis, r, c);
+            }
+         }
+      }
+   }
+
+   int compcnt = 0;
+
+   for (int i = 0; i < n; i++)
+   {
+      for (int j = 0; j < n; j++)
+      {
+
+         if (grid[i][j] == 0 and vis[i][j] == 0)
+         {
+            compcnt++;
+            dfs(i, j, grid, vis, r, c);
+         }
+      }
+   }
+
+   return compcnt;
+}

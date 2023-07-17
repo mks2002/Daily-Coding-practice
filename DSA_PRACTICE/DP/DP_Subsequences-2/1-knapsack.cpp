@@ -24,7 +24,7 @@ int32_t main()
 }
 /*
  in this question our main target is to maximize the value which we can generate so that the bag is capable of fit that much amount in the bag....
- the maxweight denotes the maximum weight that our bag can carry....
+ the maxweight denotes the maximum weight that our bag can carry i.e. it is the capacity of our bag......
 */
 
 // simple recursive solution.....
@@ -92,9 +92,11 @@ in memoiazation idx : (n-1, 0) , mxweight : (mxweight, 0)
 in tabulation idx : (0, n-1) , mxweight : (0, mxweight)
 */
 
+// whenever for computing the main answer we have to take the sum then in tabulation we initialize our dp array with 0 instead of initialize it with (-1) , because in many cases it will give wrong answer if we initialize it with -1 ......
+
 int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight)
 {
-    vector<vector<int>> dp(n, vector<int>(maxWeight + 1, -1));
+    vector<vector<int>> dp(n, vector<int>(maxWeight + 1, 0));
 
     // base cases......
     for (int i = weight[0]; i <= maxWeight; i++)
@@ -113,4 +115,60 @@ int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight)
         }
     }
     return dp[n - 1][maxWeight];
+}
+
+// space optimizing using normal approach ........
+
+int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight)
+{
+    vector<int> prev(maxWeight + 1, 0), prev2(maxWeight + 1, -1);
+
+    for (int i = weight[0]; i <= maxWeight; i++)
+        prev[i] = value[0];
+
+    for (int idx = 1; idx < n; idx++)
+    {
+        vector<int> curr(maxWeight + 1, 0);
+        for (int wt = 0; wt <= maxWeight; wt++)
+        {
+            int nontake = 0 + prev[wt];
+            int take = INT_MIN;
+            if (weight[idx] <= wt)
+                take = value[idx] + prev[wt - weight[idx]];
+
+            int ans = max(take, nontake);
+            curr[wt] = ans;
+        }
+
+        prev2 = prev;
+        prev = curr;
+    }
+
+    return prev[maxWeight];
+}
+
+// space optimization using single array.........
+
+// for doing this we only use the prev array no curr array or not the prev2 array , and for doing this when we fill the curr array in the nested loop instead of filling that curr array we start changing the prev array and for this to work properly we have to run the nested loop from the right to left direction instead of left to right , because if we run the nested loop ( 0 to mxweight ) i.e. left to right than we already override the prev value before using it for calculating the current value so it will give wrong answer , so for this to work properly we have to run the nested loop from right to left..................
+
+int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight)
+{
+    vector<int> prev(maxWeight + 1, 0);
+    for (int i = weight[0]; i <= maxWeight; i++)
+        prev[i] = value[0];
+
+    for (int idx = 1; idx < n; idx++)
+    {
+        for (int wt = maxWeight; wt >= 0; wt--)
+        {
+            int nontake = 0 + prev[wt];
+            int take = INT_MIN;
+            if (weight[idx] <= wt)
+                take = value[idx] + prev[wt - weight[idx]];
+            int ans = max(take, nontake);
+            prev[wt] = ans;
+        }
+    }
+
+    return prev[maxWeight];
 }

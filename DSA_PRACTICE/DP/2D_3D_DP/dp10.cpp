@@ -29,6 +29,9 @@ int32_t main()
 
 // in all the previous questions of grid we start from the back and try to go to the first but here we start from the start because if we try to start from the end there are multiple starting points in the last row which is not prefarable...
 
+// in this question we dont need to use any extra condition to check whether we are out of the boundary or not because once we are at last row we instantly return from there.....
+
+
 // simple recursion.....
 
 int helper(int row, int col, int n, vector<vector<int>> &triangele)

@@ -33,11 +33,10 @@ public:
     {
         rank.resize(n + 1, 0);
         parent.resize(n + 1);
-        size.resize(n + 1);
+        size.resize(n + 1, 1);
         for (int i = 0; i <= n; i++)
         {
             parent[i] = i;
-            size[i] = 1;
         }
     }
 

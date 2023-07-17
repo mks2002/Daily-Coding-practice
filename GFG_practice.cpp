@@ -21,34 +21,87 @@ int32_t main()
     }
     return 0;
 }
-
-
-// Input:
-// N=5
-// A=3, B=2
-// x=1, y=2
-// Output:
-// 2
-// Explanation:
-// Current floor of the person is 3 (A=3)
-// In first step ,lift can go x=1 floors up ,then 
-// current floor will be 3+1=4 
-// In second step ,lift can go y=2 floors down.then
-// current floor will be 4-2 =2
-// 2 steps is required to reach the floor B
-
-int minSteps(int N, int A, int B, int x, int y)
+struct Node
 {
-    if (A == B)
-        return 0;
-    else if (A > B)
-    {
-        int temp=A-B;
-        
+    int data;
+    struct Node *left, *right;
+};
 
-    }
-    else if (A < B)
-    {
 
+// since here in the main function the target is given in form of integer so we required this to get the node value corresponding to that integer target....
+Node *getRef(Node *root, int target)
+{
+    if (root == NULL || root->data == target)
+        return root;
+    Node *left = getRef(root->left, target);
+    Node *right = getRef(root->right, target);
+    if (left != NULL)
+        return left;
+    if (right != NULL)
+        return right;
+}
+
+vector<int> KDistanceNodes(Node *root, int target, int k)
+{
+    unordered_map<int, int> parent;
+    queue<Node *> q;
+    q.push(root);
+
+    // by the end of first traversal we mark all the nodes with there respective parents .....
+    while (!q.empty())
+    {
+        int size = q.size();
+        for (int i = 0; i < size; i++)
+        {
+            Node *currnode = q.front();
+            q.pop();
+
+            if (currnode->left != NULL)
+            {
+                q.push(currnode->left);
+                parent[currnode->left->data] = currnode->data;
+            }
+            if (currnode->right != NULL)
+            {
+                q.push(currnode->right);
+                parent[currnode->right->data] = currnode->data;
+            }
+        }
     }
+
+    unordered_map<int, int> visited;
+    // after the first traversal the queue is empty....
+    Node *tar = getRef(root, target);
+    q.push(tar);
+    while (!q.empty() and k--)
+    {
+        int size = q.size();
+        for (int i = 0; i < size; i++)
+        {
+            Node *curnode = q.front();
+            q.pop();
+            visited[curnode->data] = 1;
+
+            if (curnode->left != NULL and visited[curnode->left->data] == 0)
+                q.push(curnode->left);
+
+            if (curnode->right != NULL and visited[curnode->right->data] == 0)
+                q.push(curnode->right);
+
+            int parentnode = parent[curnode->data];
+            Node *parentref = getRef(root, parentnode);
+            if (parentref != NULL and visited[parentref->data] == 0)
+                q.push(parentref);
+        }
+    }
+
+    vector<int> ans;
+    while (!q.empty())
+    {
+        ans.push_back(q.front()->data);
+        q.pop();
+    }
+
+    sort(ans.begin(),ans.end());
+    return ans;
 }

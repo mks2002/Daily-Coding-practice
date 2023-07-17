@@ -70,8 +70,9 @@ pair<int, int> diameterFast(Node *root)
     int cd = left.second + right.second + 1;
 
     pair<int, int> ans;
-    ans.first = max(cd, max(ld, rd));
 
+    
+    ans.first = max(cd, max(ld, rd));
     ans.second = max(left.second, right.second) + 1;
 
     return ans;

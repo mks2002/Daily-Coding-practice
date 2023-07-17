@@ -78,12 +78,23 @@ bool subsetSumToK(int n, int k, vector<int> &arr)
 
 // tabulation....
 
+/*
+the second parameter of the dp array is denoting the target value so according to second base case 
+if (idx == 0)
+return (arr[0] == target);
+
+so if we have to convert it to into tabulation then for that we can do is when the target is equal to arr[0] then at particular that cell of the dp we have to make it true 
+
+hence dp[0][arr[0]]= true 
+and this index is only available if the arr[0]<=target because we declare the size of dp array (n* target+1)..
+
+*/
 bool subsetSumToK(int n, int k, vector<int> &arr)
 {
     vector<vector<bool>> dp(n, vector<bool>(k + 1, false));
 
     // base case.....
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)    // if the target is 0 , then whatever be the value of idx it is true......
         dp[i][0] = true;
 
     if (arr[0] <= k)

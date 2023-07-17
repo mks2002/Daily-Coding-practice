@@ -165,6 +165,7 @@ int minFallingPathSum(vector<vector<int>> &matrix)
         }
     }
 
+    // this is the third loop which we used in parent function of the recursive function.....
     for (int k = 0; k < m; k++)
     {
         minans = min(minans, dp[n - 1][k]);
