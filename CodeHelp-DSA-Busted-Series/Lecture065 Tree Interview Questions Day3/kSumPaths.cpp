@@ -46,9 +46,8 @@ void solve(Node *root, int k, int &count, vector<int> path)
 
     path.push_back(root->data);
 
-    // left
+    // recursive calls for left and right sub tree.....
     solve(root->left, k, count, path);
-    // right
     solve(root->right, k, count, path);
 
     // check for K Sum

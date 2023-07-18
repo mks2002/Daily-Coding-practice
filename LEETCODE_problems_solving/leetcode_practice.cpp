@@ -3639,3 +3639,123 @@ bool containsNearbyAlmostDuplicate(vector<int> &nums, int indexDiff, int valueDi
    }
    return false;
 }
+
+// reverse words in a string 3 leetcode .....
+
+string reverseWords(string s)
+{
+   string ans = "";
+   string temp = "";
+   for (int i = 0; i < s.length(); i++)
+   {
+      if (s[i] != ' ')
+      {
+         temp += s[i];
+      }
+      else
+      {
+         reverse(temp.begin(), temp.end());
+         ans = ans + temp;
+         ans += ' ';
+         temp = "";
+      }
+   }
+   // for the last word which will remain as it is because it does not find any next space character , so we have to deal it seperately ....
+   reverse(temp.begin(), temp.end());
+   ans = ans + temp;
+   return ans;
+}
+
+/*
+Example 1:
+
+Input: nums = [0,0,1,0]
+Output: [2,4]
+Explanation: Division at index
+- 0: numsleft is []. numsright is [0,0,1,0]. The score is 0 + 1 = 1.
+- 1: numsleft is [0]. numsright is [0,1,0]. The score is 1 + 1 = 2.
+- 2: numsleft is [0,0]. numsright is [1,0]. The score is 2 + 1 = 3.
+- 3: numsleft is [0,0,1]. numsright is [0]. The score is 2 + 0 = 2.
+- 4: numsleft is [0,0,1,0]. numsright is []. The score is 3 + 0 = 3.
+Indices 2 and 4 both have the highest possible division score 3.
+Note the answer [4,2] would also be accepted.
+Example 2:
+
+Input: nums = [0,0,0]
+Output: [3]
+Explanation: Division at index
+- 0: numsleft is []. numsright is [0,0,0]. The score is 0 + 0 = 0.
+- 1: numsleft is [0]. numsright is [0,0]. The score is 1 + 0 = 1.
+- 2: numsleft is [0,0]. numsright is [0]. The score is 2 + 0 = 2.
+- 3: numsleft is [0,0,0]. numsright is []. The score is 3 + 0 = 3.
+Only index 3 has the highest possible division score 3.
+Example 3:
+
+Input: nums = [1,1]
+Output: [0]
+Explanation: Division at index
+- 0: numsleft is []. numsright is [1,1]. The score is 0 + 2 = 2.
+- 1: numsleft is [1]. numsright is [1]. The score is 0 + 1 = 1.
+- 2: numsleft is [1,1]. numsright is []. The score is 0 + 0 = 0.
+Only index 0 has the highest possible division score 2.
+
+
+*/
+vector<int> maxScoreIndices(vector<int> &nums)
+{
+   int n = nums.size();
+   vector<int> prefix(n, 0), suffix(n, 0);
+   for (int i = 0; i < n; i++)
+   {
+      if (i == 0)
+         prefix[i] = (nums[i] == 0);
+      else
+         prefix[i] = prefix[i - 1] + (nums[i] == 0);
+   }
+
+   for (int i = n - 1; i >= 0; i--)
+   {
+      if (i == n - 1)
+         suffix[i] = (nums[i] == 1);
+      else
+         suffix[i] = suffix[i + 1] + (nums[i] == 1);
+   }
+
+   int maxscore = 0;
+   for (int i = 0; i <= n; i++)
+   {
+      if (i == 0)
+         maxscore = max(maxscore, suffix[i]);
+      else if (i == n)
+         maxscore = max(maxscore, prefix[i - 1]);
+      else
+         maxscore = max(maxscore, prefix[i - 1] + suffix[i]);
+   }
+
+   vector<int> ans;
+   for (int i = 0; i <= n; i++)
+   {
+      int score;
+      if (i == 0)
+         score = suffix[i];
+      if (i == n)
+         score = prefix[i - 1];
+      else
+         score = prefix[i - 1] + suffix[i];
+
+      if (score == maxscore)
+         ans.push_back(i);
+   }
+
+   return ans;
+}
+
+// maximum path sum binary tree.....
+ 
+int maxPathSum(TreeNode *root)
+{
+}
+
+
+
+

@@ -93,6 +93,70 @@ public:
     }
 };
 
+// no of proviences using dsu......
+
+int findCircleNum(vector<vector<int>> &isConnected)
+{
+    int v = isConnected.size();
+    disjointsetUnion ds(v);
+    for (int i = 0; i < v; i++)
+    {
+        for (int j = 0; j < v; j++)
+        {
+            if (isConnected[i][j] == 1)
+                ds.unionbySize(i, j);
+        }
+    }
+
+    int componentcnt = 0;
+    for (int i = 0; i < v; i++)
+    {
+        if (ds.findparent(i) == i)
+            componentcnt++;
+    }
+
+    return componentcnt;
+}
+
+//  Number of Operations to Make Network Connected...........
+
+// in one operation we can remove an extra edge and use this 2 join 2 connected components now we have to return the minimum no of operations so that there is no connected component remain in the graph if it is not possible then return -1 ......
+
+// if 2 components have same parent it means they are connected becuase they already have an edge and still if we can found any edge it means it is extra edge so we have to count it....
+
+int makeConnected(int n, vector<vector<int>> &connections)
+{
+    disjointsetUnion ds(n);
+    int extraedge = 0;
+    for (auto it : connections)
+    {
+        int u = it[0], v = it[1];
+        if (ds.findparent(u) == ds.findparent(v))
+            extraedge++;
+        else
+            ds.unionbySize(u, v);
+    }
+
+    int componentcnt = 0;
+
+    // because for each connected component its parent node is equal to the node.....
+    for (int i = 0; i < n; i++)
+    {
+        if (ds.findparent(i) == i)
+            componentcnt++;
+    }
+
+    int ans = componentcnt - 1;
+    if (extraedge >= ans)
+    {
+        return ans;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
 // account merge leetcode......
 
 /*
@@ -168,71 +232,14 @@ vector<vector<string>> accountsMerge(vector<vector<string>> &accounts)
     return ans;
 }
 
-//  Number of Operations to Make Network Connected...........
-
-// in one operation we can remove an extra edge and use this 2 join 2 connected components now we have to return the minimum no of operations so that there is no connected component remain in the graph if it is not possible then return -1 ......
-
-// if 2 components have same parent it means they are connected becuase they already have an edge and still if we can found any edge it means it is extra edge so we have to count it....
-
-int makeConnected(int n, vector<vector<int>> &connections)
-{
-    disjointsetUnion ds(n);
-    int extraedge = 0;
-    for (auto it : connections)
-    {
-        int u = it[0], v = it[1];
-        if (ds.findparent(u) == ds.findparent(v))
-            extraedge++;
-        else
-            ds.unionbySize(u, v);
-    }
-
-    int componentcnt = 0;
-
-    // because for each connected component its parent node is equal to the node.....
-    for (int i = 0; i < n; i++)
-    {
-        if (ds.findparent(i) == i)
-            componentcnt++;
-    }
-
-    int ans = componentcnt - 1;
-    if (extraedge >= ans)
-    {
-        return ans;
-    }
-    else
-    {
-        return -1;
-    }
-}
-
-// no of proviences using dsu......
-
-int findCircleNum(vector<vector<int>> &isConnected)
-{
-    int v = isConnected.size();
-    disjointsetUnion ds(v);
-    for (int i = 0; i < v; i++)
-    {
-        for (int j = 0; j < v; j++)
-        {
-            if (isConnected[i][j] == 1)
-                ds.unionbySize(i, j);
-        }
-    }
-
-    int componentcnt = 0;
-    for (int i = 0; i < v; i++)
-    {
-        if (ds.findparent(i) == i)
-            componentcnt++;
-    }
-
-    return componentcnt;
-}
-
 // no of island 2 --> online query based questions....
+
+/*
+HINT and STEPS to IMPLEMENT -->
+whenever we make any cell value ( 0 to 1 ) cnt ++
+then iterate on its neighbouring element for each neighbouring element if we found it is land(1) and they are not belong to the same commponent union them and reduce cnt by 1 i.e. cnt -- ...
+keep the track current cnt in a array for each operation ...
+*/
 
 bool isvailed(int row, int col, int n, int m, vector<vector<int>> &vis)
 {
@@ -352,7 +359,7 @@ int largestIsland(vector<vector<int>> &grid)
                 for (int i = 0; i < 4; i++)
                 {
                     int adjrow = row + r[i], adjcol = col + c[i];
-                    if (isvailed(adjrow, adjcol, n, grid) == true)
+                    if (isvailed(adjrow, adjcol, n, grid) == true) 
                     {
                         int adjnodeno = adjrow * n + adjcol;
                         int parentadjcomponent = ds.findparent(adjnodeno);

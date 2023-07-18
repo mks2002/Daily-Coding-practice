@@ -26,7 +26,7 @@ int32_t main()
 /*
 algorithm....
 
-1. first we take the array[0] as initial buying price
+1. first we take the array[0] as initial buying price..
 2. run a loop from 1 to n and in each step we consider array [i] as current selling price and calculate profit = sell - buy
 3. change the mxprofit by maximum of it and current profit.
 4. change the buying price by minimum of initial buying price and current array[i]..

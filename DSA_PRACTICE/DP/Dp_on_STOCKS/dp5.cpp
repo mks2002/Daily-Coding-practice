@@ -45,7 +45,7 @@ int helper(int idx, int currstate, vector<int> &prices, vector<vector<int>> &dp)
     int profit = 0;
     if (currstate == 1)
     {
-        int take = -prices[idx] + helper(idx, 0, prices, dp);
+        int take = -prices[idx] + helper(idx + 1, 0, prices, dp);
         int nontake = 0 + helper(idx + 1, 1, prices, dp);
         profit = max(take, nontake);
     }
@@ -70,7 +70,7 @@ int maxProfit(vector<int> &prices)
 
 // tabulation........
 
-// for tabulating this code we have to declare a 2d array of size (n+2)*2 because we are dealing with idx+2 .....
+// for tabulating this code we have to declare a 2d array of size (n+2)*2 because we are dealing with idx+2  .....
 
 int maxProfit(vector<int> &prices)
 {
@@ -78,12 +78,12 @@ int maxProfit(vector<int> &prices)
 
     vector<vector<int>> dp(n + 2, vector<int>(2, -1));
 
-    // base case...
+    // base case --> if idx == n return 0 ...
     dp[n][0] = dp[n][1] = dp[n + 1][0] = dp[n + 1][1] = 0;
 
     for (int idx = n - 1; idx >= 0; idx--)
     {
-        for (int currstate = 0; currstate <= 1; currstate++)
+        for (int currstate = 1; currstate >= 0; currstate--)
         {
             int profit = 0;
             if (currstate == 1)
@@ -115,22 +115,22 @@ now here actually we have to use the prev2 similar to frog jump question
 dp[idx] --> curr , dp[idx+1] --> prev , dp[idx+2] --> prev2.....
 
 in the outer loop  --->  prev2 = prev; prev = curr;
-*/
 
+// in this question we have to maintain 2 different states so required both prev2 , prev in the space optimization ....
+*/
 
 int maxProfit(vector<int> &prices)
 {
     int n = prices.size();
     vector<int> prev(2, -1), prev2(2, -1);
 
-    
     // base case....
     prev[0] = prev[1] = prev2[0] = prev2[1] = 0;
 
     for (int idx = n - 1; idx >= 0; idx--)
     {
         vector<int> curr(2, 0);
-        for (int currstate = 0; currstate <= 1; currstate++)
+        for (int currstate = 1; currstate >= 0; currstate--)
         {
             int profit = 0;
             if (currstate == 1)
@@ -153,3 +153,13 @@ int maxProfit(vector<int> &prices)
     }
     return prev[1];
 }
+
+/*
+in case of tabulation and space optimization both, the currstate loop we can run it from (0 to 1) or ( 1 to 0 ) both works properly but it is recommended that whatever is our buying state in memoization we have to start our loop from that because first we have to buy then only we can sell..
+ ex --> 
+ if buy = 1 the currstate loop -> ( 1 to 0 )
+ if buy = 0 the currstate loop -> ( 0 to 1 )
+
+and since in our memoization code the buy = 1 so in our tabulation and space optimizatio we run the currstate loop from (1 to 0) .......
+
+*/

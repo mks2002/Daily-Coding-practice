@@ -25,6 +25,12 @@ int32_t main()
 
 // buy and sell stocks 4......
 
+/*
+currstate = 1 --> buying state
+currstate = 0 --> selling state.
+
+*/
+
 // similar to the previous problem there we are allowed to do atmost 2 transactions here we are allowed to do at most k transactions......
 
 // simple recursion....
@@ -98,5 +104,103 @@ int maxProfit(int k, vector<int> &prices)
     return ans;
 }
 
-
 // tabulation.....
+
+int maxProfit(int k, vector<int> &prices)
+{
+    int n = prices.size();
+    vector<vector<vector<int>>> dp(n + 1, vector<vector<int>>(2, vector<int>(k + 1, -1)));
+
+    // if cap == 0 return 0 .....
+    for (int idx = 0; idx <= n; idx++)
+    {
+        for (int currstate = 0; currstate <= 1; currstate++)
+            dp[idx][currstate][0] = 0;
+    }
+
+    // if idx == n return 0 ......
+    for (int currstate = 0; currstate <= 1; currstate++)
+    {
+        for (int cap = 0; cap <= k; cap++)
+            dp[n][currstate][cap] = 0;
+    }
+
+    for (int idx = n - 1; idx >= 0; idx--)
+    {
+        for (int currstate = 1; currstate >= 0; currstate--)
+        {
+            for (int cap = 1; cap <= k; cap++)
+            {
+                int profit = 0;
+                if (currstate == 1) // buying state ....
+                {
+                    int nontake = 0 + dp[idx + 1][1][cap];
+                    int take = -prices[idx] + dp[idx + 1][0][cap];
+                    profit = max(take, nontake);
+                }
+                else if (currstate == 0) // selling state ....
+                {
+                    int nontake = 0 + dp[idx + 1][0][cap];
+                    int take = prices[idx] + dp[idx + 1][1][cap - 1];
+                    profit = max(take, nontake);
+                }
+
+                dp[idx][currstate][cap] = profit;
+            }
+        }
+    }
+
+    return dp[0][1][k];
+}
+
+// space optimization ....
+
+// dp[idx+1] --> prev , dp[idx] --> curr .....
+
+int maxProfit(int k, vector<int> &prices)
+{
+    int n = prices.size();
+    vector<vector<int>> prev(2, vector<int>(k + 1, -1)), prev2(2, vector<int>(k + 1, -1));
+
+    // if cap == 0 return 0 .....
+    for (int currstate = 0; currstate <= 1; currstate++)
+        prev[currstate][0] = 0;
+
+    // if idx == n return 0 ......
+    for (int currstate = 0; currstate <= 1; currstate++)
+    {
+        for (int cap = 0; cap <= k; cap++)
+            prev[currstate][cap] = 0;
+    }
+
+    for (int idx = n - 1; idx >= 0; idx--)
+    {
+        vector<vector<int>> curr(2, vector<int>(k + 1, 0));
+        for (int currstate = 1; currstate >= 0; currstate--)
+        {
+            for (int cap = 1; cap <= k; cap++)
+            {
+                int profit = 0;
+                if (currstate == 1)
+                {
+                    int nontake = 0 + prev[1][cap];
+                    int take = -prices[idx] + prev[0][cap];
+                    profit = max(take, nontake);
+                }
+                else if (currstate == 0)
+                {
+                    int nontake = 0 + prev[0][cap];
+                    int take = prices[idx] + prev[1][cap - 1];
+                    profit = max(take, nontake);
+                }
+
+                curr[currstate][cap] = profit;
+            }
+        }
+
+        prev2 = prev;
+        prev = curr;
+    }
+
+    return prev[1][k];
+}

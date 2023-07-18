@@ -164,3 +164,39 @@ int spanningTree(int V, vector<vector<int>> adj[])
 
     return mstwtsum;
 }
+
+// leetcode 1584 --> minimum cost to connect all the points ....
+
+int minCostConnectPoints(vector<vector<int>> &points)
+{
+    int n = points.size();
+    vector<pair<int, pair<int, int>>> v;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            int dist = abs(points[i][0] - points[j][0]) + abs(points[i][1] - points[j][1]);
+            v.push_back({dist, {i, j}});
+        }
+    }
+
+    sort(v.begin(), v.end());
+    int cost = 0;
+    disjointsetUnion ds(n);
+
+    for (auto it : v)
+    {
+        int u = it.second.first, v = it.second.second, dist = it.first;
+        if (ds.findparent(u) != ds.findparent(v))
+        {
+            cost += dist;
+            // it is undirected graph , so we need to do it for both the sides .....
+            ds.unionbyRank(u, v);
+            ds.unionbyRank(v, u);
+        }
+        else
+        {
+            // if they are already connected then do nothing ....
+        }
+    }
+}

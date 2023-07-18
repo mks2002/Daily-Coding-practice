@@ -19,7 +19,7 @@ int helper(int idx1, int idx2, string s1, string s2)
    if (idx1 < 0 or idx2 < 0)
       return 0;
 
-   // if we want we can remove this base case because it will automatically take care by the recursion and when it go to idx<0 then we return 0 already....
+  
    if (idx1 == 0 and idx2 == 0)
    {
       if (s1[0] == s2[0])
@@ -56,6 +56,7 @@ int f(int idx1, int idx2, string &s1, string &s2, vector<vector<int>> &dp)
       return 0;
    }
 
+// if we not include this base case still it is working properly ,and also this condition may not always encounters because it is not necessary that both indexes become 0 at the same time ..........
    if (idx1 == 0 and idx2 == 0)
    {
       if (s1[0] == s2[0])

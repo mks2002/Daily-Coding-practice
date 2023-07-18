@@ -31,6 +31,7 @@ it is similar to the previous question but here we are restricted to do only max
 to solve this question everything remain same as previous just here we have to add one more parameter in the function call which is cap whose value varying from 0 1 2 it denotes the no of transaction we have done till now..
 
 once one complete trasaction (1 buy + 1 sell ) will be done we reduce the value of cap by 1...
+it means we have to reduce the cap value by 1 in the take case of either buy or sell , but not in both...
 
 from parent function the value of cap is 2 and in base case one more condition is added ( if cap ==0 return 0 )..
 
@@ -152,7 +153,7 @@ int maxProfit(vector<int> &prices)
 
     for (int idx = n - 1; idx >= 0; idx--)
     {
-        for (int currstate = 0; currstate <= 1; currstate++)
+        for (int currstate = 1; currstate >= 0; currstate--)
         {
             for (int cap = 1; cap <= 2; cap++)
             {
@@ -201,7 +202,7 @@ int maxProfit(vector<int> &prices)
     for (int idx = n - 1; idx >= 0; idx--)
     {
         vector<vector<int>> curr(2, vector<int>(3, 0));
-        for (int currstate = 0; currstate <= 1; currstate++)
+        for (int currstate = 1; currstate >= 0; currstate--)
         {
             for (int cap = 1; cap <= 2; cap++)
             {

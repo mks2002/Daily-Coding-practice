@@ -29,13 +29,19 @@ int32_t main()
 
 // simple recursive solution......
 
+// in this kind of problems we have to do transactions and if we try to do transactions in reverse order then it is very complicated so in this type of questions we have to solve the recursion from (0 to n-1) instead of (n-1 to 0) and since the recursion is (0 to n-1) so the tabulation will be from (n-1 to 0) , and the currstate variable loop is also not reverse in the tabulation because whether it is tabulation or recusion first always we have to buy then only we can able to sell.....
+
 /*
 currstate = 1 --> buying state
 currstate = 0 --> selling state.
 
-*/
+whenever we buy we have to subtract the current price[idx] from our profit or money because we spend our money to buy this , and whenever we sell something we add this in our money because on selling this we get the money ...
 
-// in this kind of problems we have to do transactions and if we try to do transactions in reverse order then it is very complicated so in this type of questions we have to solve the recursion from (0 to n-1) instead of (n-1 to 0) and since the recursion is (0 to n-1) so the tabulation will be from (n-1 to 0) , and the currstate variable loop is also not reverse in the tabulation because whether it is tabulation or recusion first always we have to buy then only we can able to sell.....
+
+base case -->
+from idx ( 0 to n-1) we can do as many transactions as many as possible but once we reach at idx = n then we cant do further transaction because at that index there is no element so once we reach there we have to simply return 0 ....
+
+*/
 
 int helper(int idx, int currstate, vector<int> &prices)
 {
@@ -47,7 +53,7 @@ int helper(int idx, int currstate, vector<int> &prices)
     // buying state.....
     if (currstate == 1)
     {
-        int take = -prices[idx] + helper(idx, 0, prices);
+        int take = -prices[idx] + helper(idx + 1, 0, prices);
         int nontake = 0 + helper(idx + 1, 1, prices);
         profit = max(take, nontake);
     }
@@ -62,6 +68,7 @@ int helper(int idx, int currstate, vector<int> &prices)
     return profit;
 }
 
+// in the parent function we have to pass the initial state as buy because first we have to buy then only we can sell ...
 int maxProfit(vector<int> &prices)
 {
     int idx = 0, buy = 1, sell = 0;
@@ -73,7 +80,6 @@ int maxProfit(vector<int> &prices)
 
 int helper(int idx, int currstate, vector<int> &prices, vector<vector<int>> &dp)
 {
-    // base case...
     if (idx == prices.size())
         return 0;
 
@@ -81,13 +87,13 @@ int helper(int idx, int currstate, vector<int> &prices, vector<vector<int>> &dp)
         return dp[idx][currstate];
 
     int profit = 0;
-    if (currstate == 1)
+    if (currstate == 1) // buy ..
     {
-        int take = -prices[idx] + helper(idx, 0, prices, dp);
+        int take = -prices[idx] + helper(idx + 1, 0, prices, dp);
         int nontake = 0 + helper(idx + 1, 1, prices, dp);
         profit = max(take, nontake);
     }
-    else if (currstate == 0)
+    else if (currstate == 0) // sell ..
     {
         int take = prices[idx] + helper(idx + 1, 1, prices, dp);
         int nontake = 0 + helper(idx + 1, 0, prices, dp);
@@ -114,8 +120,16 @@ int maxProfit(vector<int> &prices)
 
 3.  one thing which is common in both memoiazation and tabulation is that what we return in memoiazation and tabulation both have same parameter i.e.  for memoiazation the parameter of parent function call is become the return index value of the dp array of tabulation code..
 
+
+4 . one more thing in case of tabulation the currstate loop we can run it from (0 to 1) or ( 1 to 0 ) both works properly but it is recommended that whatever is our buying state in memoization we have to start our loop from that because first we have to buy then only we can sell..
+ex --> if buy = 1 the currstate loop -> ( 1 to 0 )
+       if buy = 0 the currstate loop -> ( 0 to 1 )
+
+
+
 */
 
+// method-1 --> currstate ( 0 to 1 )....
 int maxProfit(vector<int> &prices)
 {
     int n = prices.size();
@@ -150,6 +164,42 @@ int maxProfit(vector<int> &prices)
     return dp[0][1];
 }
 
+// method-2 --> currstate (1 to 0 ) --> this is more preferable because first we have to do buy and then sell and in our case of memoization buy is 1 .....
+int maxProfit(vector<int> &prices)
+{
+    int n = prices.size();
+
+    vector<vector<int>> dp(n + 1, vector<int>(2, -1));
+
+    // base case...
+    dp[n][0] = dp[n][1] = 0;
+
+    int ans = 0;
+    for (int idx = n - 1; idx >= 0; idx--)
+    {
+        for (int currstate = 1; currstate >= 0; currstate--)
+        {
+            int profit = 0;
+            if (currstate == 1)
+            {
+                int take = -prices[idx] + dp[idx + 1][0];
+                int nontake = 0 + dp[idx + 1][1];
+                profit = max(take, nontake);
+            }
+            else
+            {
+                int take = prices[idx] + dp[idx + 1][1];
+                int nontake = 0 + dp[idx + 1][0];
+                profit = max(take, nontake);
+            }
+
+            dp[idx][currstate] = profit;
+        }
+    }
+
+    return dp[0][1];
+}
+
 // space optimiazation....
 
 int maxProfit(vector<int> &prices)
@@ -163,7 +213,7 @@ int maxProfit(vector<int> &prices)
     for (int idx = n - 1; idx >= 0; idx--)
     {
         vector<int> curr(2, 0);
-        for (int currstate = 0; currstate <= 1; currstate++)
+        for (int currstate = 1; currstate >= 0; currstate--)
         {
             int profit = 0;
             if (currstate == 1)

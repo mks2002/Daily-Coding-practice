@@ -136,3 +136,54 @@ vector<int> maxSumarray(vector<int> &nums)
 
     return ans;
 }
+
+int maxSubArray(vector<int> &nums)
+{
+    int mod = 1e9 + 7;
+    int sum = 0;
+    int maxsum = INT_MIN;
+    int n = nums.size();
+    for (int i = 0; i < n; i++)
+    {
+        sum += nums[i];
+        maxsum = max(maxsum, sum);
+
+        // if at any time sum is less then 0 then we start it again with 0 ...
+        if (sum < 0)
+            sum = 0;
+    }
+
+    if (maxsum < 0)
+        return 0;
+    else
+        return maxsum % mod;
+}
+
+int kConcatenationMaxSum(vector<int> &arr, int k)
+{
+    int ans = 0, mod = 1e9 + 7;
+    if (k == 1)
+    {
+        return maxSubArray(arr) % mod;
+    }
+    else
+    {
+        int sum = 0;
+        for (auto it : arr)
+            sum += it;
+
+        vector<int> temp = arr;
+        for (auto it : arr)
+            temp.push_back(it);
+
+        if (sum < 0)
+        {
+            return maxSubArray(temp) % mod;
+        }
+        else
+        {
+            ans = maxSubArray(temp) % mod;
+            return (ans + ((k - 2) * sum) % mod) % mod;
+        }
+    }
+}
