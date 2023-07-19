@@ -95,12 +95,15 @@ int numberOfPaths(vector<vector<int>> &grid, int k)
     return ans % mod;
 }
 
+// here we take the third parameter of dp array as 51 because the range of k is from 0 to 50 .....
 
 
 
 /*
+
 // another way to write the same recursive code just changing the initial values.....
 // this is wrong approach becuase here we without knowing the current value of (i-1) or (j-1) we directly try to access grid[i-1][j-1] so it will give error....
+
 int helper(int i, int j, int pathsum, int k, vector<vector<int>> &grid)
 {
     if (i < 0 or j < 0)

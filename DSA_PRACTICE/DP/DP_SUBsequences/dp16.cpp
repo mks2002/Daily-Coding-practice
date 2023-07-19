@@ -153,7 +153,7 @@ int findWays(vector<int> &num, int tar)
 }
 
 /*
-the all above codes are working properly if there is no 0 in the array but if the array contains 0 then the function gives wrong answer because whethere we consider the 0 into the target or not it gives the same answer again and again ex -->
+the all above codes are working properly if there is no 0 in the array but if the array contains 0 then the function gives wrong answer because whether we consider the 0 into the target or not it gives the same answer again and again ex -->
 input [0 ,0 ,0 ,1]  target=1
 output --> 1 ( of previous code )
 but here the actual outpu is 4 { [0,1] , [ 0, 0, 1] [0,0,0,1] and [1]}..

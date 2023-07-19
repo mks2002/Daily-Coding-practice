@@ -360,5 +360,46 @@ int findCheapestPrice(int n, vector<vector<int>> &flights, int src, int dst, int
         return dist[dst];
 }
 
+// number of ways to reach at the destination ........
 
+int countPaths(int n, vector<vector<int>> &roads)
+{
+    vector<pair<int, int>> adj[n];
+    for (auto it : roads)
+    {
+        int u = it[0], v = it[1], wt = it[2];
+        adj[u].push_back({v, wt});
+        adj[v].push_back({u, wt});
+    }
+    int mod = 1e9 + 7;
 
+    vector<int> dist(n, INT_MAX), ways(n, 0);
+
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    dist[0] = 0, ways[0] = 1;
+    pq.push({dist[0], 0});
+    while (!pq.empty())
+    {
+        int currnode = pq.top().second, currdist = pq.top().first;
+        pq.pop();
+        for (auto it : adj[currnode])
+        {
+            int nextnode = it.first, nextdist = it.second;
+            if ((currdist + nextdist) < dist[nextnode])
+            {
+                dist[nextnode] = (currdist + nextdist) % mod;
+                pq.push({dist[nextnode], nextnode});
+                ways[nextnode] = ways[currnode] % mod;
+            }
+            else if ((currdist + nextdist) == dist[nextnode])
+            {
+                // it means we have already reach at this node with the minimum path so add it into our number of ways ...
+
+                ways[nextnode] = (ways[nextnode] + ways[currnode]) % mod;
+            }
+        }
+    }
+
+    int ans = ways[n - 1] % mod;
+    return ans;
+}

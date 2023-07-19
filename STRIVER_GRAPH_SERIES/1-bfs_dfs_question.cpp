@@ -921,6 +921,7 @@ int numEnclaves(vector<vector<int>> &grid)
 
 // no of closed islands.......
 
+
 void bfs(int row, int col, vector<vector<int>> &grid, vector<vector<int>> &vis, vector<int> &r, vector<int> &c)
 {
    int n = grid.size(), m = grid[0].size();
@@ -947,7 +948,6 @@ void bfs(int row, int col, vector<vector<int>> &grid, vector<vector<int>> &vis, 
       }
    }
 }
-
 
 void dfs(int row, int col, vector<vector<int>> &grid, vector<vector<int>> &vis, vector<int> &r, vector<int> &c)
 {
@@ -984,15 +984,26 @@ int closedIsland(vector<vector<int>> &grid)
 
    for (int i = 0; i < n; i++)
    {
-      for (int j = 0; j < m; j++)
+      if (grid[i][0] == 0 and vis[i][0] == 0)
       {
-         if (i == 0 or i == n - 1 or j == 0 or j == m - 1)
-         {
-            if (grid[i][j] == 0)
-            {
-               dfs(i, j, grid, vis, r, c);
-            }
-         }
+         dfs(i, 0, grid, vis, r, c);
+      }
+      if (grid[i][m - 1] == 0 and vis[i][m - 1] == 0)
+      {
+         dfs(i, m - 1, grid, vis, r, c);
+      }
+   }
+
+   for (int j = 0; j < m; j++)
+   {
+      if (grid[0][j] == 0 and vis[0][j] == 0)
+      {
+         dfs(0, j, grid, vis, r, c);
+      }
+
+      if (grid[n - 1][j] == 0 and vis[n - 1][j] == 0)
+      {
+         dfs(n - 1, j, grid, vis, r, c);
       }
    }
 
