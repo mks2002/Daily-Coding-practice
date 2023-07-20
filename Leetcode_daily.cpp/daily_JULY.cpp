@@ -541,3 +541,27 @@ public:
         }
     }
 };
+
+bool cmp(vector<int> &a, vector<int> &b)
+{
+    return a[1] < b[1];
+}
+
+// we have to find number of intervals which we have to remove to make all seperate ....
+int eraseOverlapIntervals(vector<vector<int>> &intervals)
+{
+    int n = intervals.size();
+    sort(intervals.begin(), intervals.end());
+    int cnt = 1;
+    int prevans = intervals[0][1];
+    for (int i = 1; i < n; i++)
+    {
+        if (intervals[i][0] > prevans)
+        {
+            cnt++;
+            prevans = intervals[i][1];
+        }
+    }
+    int ans = n - cnt;
+    return ans;
+}
