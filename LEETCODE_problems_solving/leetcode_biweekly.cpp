@@ -236,3 +236,132 @@ int isWinner(vector<int> &player1, vector<int> &player2)
    else
       return 2;
 }
+
+// biweekly 109 ...........
+bool isGood(vector<int> &nums)
+{
+   unordered_map<int, int> m;
+   for (auto it : nums)
+      m[it]++;
+   int size = nums.size();
+   if (m.size() != size - 1)
+      return false;
+   for (int i = 1; i <= size - 2; i++)
+   {
+      if (m[i] != 1)
+         return false;
+   }
+   if (m[size - 1] != 2)
+      return false;
+   return true;
+}
+
+bool isvowel(char c)
+{
+   vector<char> vowel = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'};
+   for (auto ch : vowel)
+   {
+      if (ch == c)
+         return true;
+   }
+   return false;
+}
+
+string sortVowels(string s)
+{
+   vector<char> vowel;
+   for (auto it : s)
+   {
+      if (isvowel(it) == true)
+         vowel.push_back(it);
+   }
+   sort(vowel.begin(), vowel.end());
+   string ans = "";
+   int idx = 0;
+   for (auto it : s)
+   {
+      if (!isvowel(it))
+         ans.push_back(it);
+      else
+         ans.push_back(vowel[idx++]);
+   }
+
+   return ans;
+}
+
+long long maxScore(vector<int> &nums, int x)
+{
+}
+
+class Node
+{
+public:
+   int val;
+   Node *left;
+   Node *right;
+   Node *next;
+
+   Node() : val(0), left(NULL), right(NULL), next(NULL) {}
+
+   Node(int _val) : val(_val), left(NULL), right(NULL), next(NULL) {}
+
+   Node(int _val, Node *_left, Node *_right, Node *_next)
+       : val(_val), left(_left), right(_right), next(_next) {}
+};
+
+int accountBalanceAfterPurchase(int purchaseAmount)
+{
+   int mod = purchaseAmount % 10;
+   if (mod == 0)
+      return 100 - purchaseAmount;
+
+   if (mod < 5)
+      purchaseAmount -= mod;
+   else if (mod > 5)
+      purchaseAmount += (10 - mod);
+   else if (mod == 5)
+      purchaseAmount += 5;
+
+   int ans = 100 - purchaseAmount;
+   return ans;
+}
+
+struct ListNode
+{
+   int val;
+   ListNode *next;
+   ListNode() : val(0), next(nullptr) {}
+   ListNode(int x) : val(x), next(nullptr) {}
+   ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+ListNode *insertGreatestCommonDivisors(ListNode *head)
+{
+   vector<int> temp;
+   ListNode *h = head;
+   while (h != NULL)
+   {
+      temp.push_back(h->val);
+      h = h->next;
+   }
+   if (temp.size() == 1)
+      return head;
+
+   vector<int> gcd;
+   for (int i = 0; i < temp.size() - 1; i++)
+   {
+      int currval = __gcd(temp[i], temp[i + 1]);
+      gcd.push_back(currval);
+   }
+
+   h = head;
+   int idx = 0;
+   while (h != NULL and idx < gcd.size())
+   {
+      ListNode *nextnode = h->next;
+      h->next = new ListNode(gcd[idx++]);
+      h->next->next = nextnode;
+      h = h->next->next;
+   }
+   return head;
+}

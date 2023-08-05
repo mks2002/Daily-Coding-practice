@@ -30,7 +30,7 @@ int32_t main()
 APPROACH -->
 in the tabulation this time it is not confirm that we got our answer at dp[n-1][m-1] because the longest common substring may be some where between 2 strings , so we have to keep a max variable initialize with 0 and each time when we found any matching character we have to stroe the max of dp[i][j] into the max variable , and if the both characters not match at point we not go for
 max(dp[idx1 - 1][idx2], dp[idx1][idx2 - 1]);
-we directly put theer a 0 , because here if at any point 2 characters are not match then it cant be part of the common substring ...
+we directly put there a 0 , because here if at any point 2 characters are not match then it cant be part of the common substring ...
 
 ex -->
 

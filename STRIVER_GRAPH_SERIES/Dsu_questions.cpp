@@ -359,7 +359,7 @@ int largestIsland(vector<vector<int>> &grid)
                 for (int i = 0; i < 4; i++)
                 {
                     int adjrow = row + r[i], adjcol = col + c[i];
-                    if (isvailed(adjrow, adjcol, n, grid) == true) 
+                    if (isvailed(adjrow, adjcol, n, grid) == true)
                     {
                         int adjnodeno = adjrow * n + adjcol;
                         int parentadjcomponent = ds.findparent(adjnodeno);

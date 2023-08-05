@@ -92,6 +92,9 @@ int frogjumptabu(int n, vi &heights)
  dp[i]=curr
 */
 
+
+// in all this kind of question where we have to add something in the answer in each recursion call , we initialize our prev and prev2 with 0 , not with -1 .....
+
 int frogjumpspaceopt(int n, vi &heights)
 {
    int prev = 0;

@@ -297,3 +297,146 @@ int LongestRepeatingSubsequence(string &str)
     vector<vector<int>> dp(str.size(), vector<int>(str.size(), -1));
     return helper(0, 0, str, dp);
 }
+
+struct node
+{
+    int data;
+    struct node *next;
+
+    node(int x)
+    {
+        data = x;
+        next = NULL;
+    }
+
+} *head;
+
+struct node *reverse(struct node *head, int k)
+{
+    node *currptr = head, *prevptr = NULL;
+    node *nextptr;
+    int cnt = 0;
+    while (currptr != NULL and cnt < k)
+    {
+        nextptr = prevptr;
+        prevptr = currptr;
+        currptr = currptr->next;
+        prevptr->next = nextptr;
+        cnt++;
+    }
+
+    if (currptr != NULL)
+    {
+        head->next = reverse(currptr, k);
+    }
+
+    return prevptr;
+}
+
+Node *segregate(Node *head)
+{
+    int cnt0 = 0, cnt1 = 0, cnt2 = 0;
+    Node *temp = head;
+    while (temp != NULL)
+    {
+        if (temp->data == 0)
+            cnt0++;
+        else if (temp->data == 1)
+            cnt1++;
+        else if (temp->data == 2)
+            cnt2++;
+        temp = temp->next;
+    }
+
+    temp = head;
+    while (temp != NULL)
+    {
+        if (cnt0 > 0)
+        {
+            temp->data = 0;
+            cnt0--;
+        }
+        else if (cnt1 > 0)
+        {
+            temp->data = 1;
+            cnt1--;
+        }
+        else if (cnt2 > 0)
+        {
+            temp->data = 2;
+            cnt2--;
+        }
+        temp = temp->next;
+    }
+    return head;
+}
+
+vector<int> findSpiral(Node *root)
+{
+    vector<int> ans;
+    if (root == NULL)
+        return ans;
+    queue<Node *> q;
+    q.push(root);
+    bool rightLeft = true;
+    while (!q.empty())
+    {
+        int size = q.size();
+        vector<int> temp(size);
+        for (int i = 0; i < size; i++)
+        {
+            Node *front = q.front();
+            q.pop();
+            int idx = rightLeft ? size - i - 1 : i;
+            temp[idx] = front->data;
+
+            if (front->left != NULL)
+                q.push(front->left);
+            if (front->right != NULL)
+                q.push(front->right);
+        }
+        rightLeft = !rightLeft;
+        for (auto it : temp)
+            ans.push_back(it);
+    }
+    return ans;
+}
+
+
+
+int shortestDistance(int N, int M, vector<vector<int>> A, int X, int Y)
+{
+    if (A[0][0] == 0 or A[X][Y] == 0)
+        return -1;
+
+    vector<vector<int>> vis(N, vector<int>(M, 0));
+    queue<pair<pair<int, int>, int>> q;
+
+    vector<int> r = {0, -1, 0, 1};
+    vector<int> c = {-1, 0, 1, 0};
+
+    q.push({{0, 0}, 1});
+    vis[0][0] = 1;
+    while (!q.empty())
+    {
+        int currrow = q.front().first.first;
+        int currcol = q.front().first.second;
+        int currdist = q.front().second;
+        q.pop();
+
+        if (currrow == X and currcol == Y)
+            return currdist-1;
+
+        for (int i = 0; i < 4; i++)
+        {
+            int newrow = currrow + r[i], newcol = currcol + c[i];
+            if (newrow >= 0 and newrow < N and newcol >= 0 and newcol < M and A[newrow][newcol] == 1 and vis[newrow][newcol] == 0)
+            {
+                q.push({{newrow, newcol}, currdist + 1});
+                vis[newrow][newcol] = 1;
+            }
+        }
+    }
+
+    return -1;
+}

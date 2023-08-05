@@ -27,7 +27,6 @@ struct Node
     struct Node *left, *right;
 };
 
-
 // since here in the main function the target is given in form of integer so we required this to get the node value corresponding to that integer target....
 Node *getRef(Node *root, int target)
 {
@@ -102,6 +101,164 @@ vector<int> KDistanceNodes(Node *root, int target, int k)
         q.pop();
     }
 
-    sort(ans.begin(),ans.end());
+    sort(ans.begin(), ans.end());
     return ans;
 }
+
+int uniquePositions(string moves, long long k)
+{
+    int curridx = 0;
+    unordered_set<int> unique;
+    unique.insert(curridx);
+
+    for (int i = 0; i < moves.length(); i++)
+    {
+        if (moves[i] == 'F')
+        {
+            curridx += k;
+        }
+        else if (moves[i] == 'B')
+        {
+            curridx -= k;
+        }
+        unique.insert(curridx);
+    }
+
+    return unique.size();
+}
+
+// Function to perform DFS and find the farthest node and its distance from a given source node
+pair<long long, int> dfs(int node, const unordered_map<int, vector<pair<int, int>>> &graph, vector<bool> &visited, long long distance)
+{
+    visited[node] = true;
+    long long max_distance = distance;
+    int farthest_node = node;
+    for (const auto &neighbor : graph.at(node))
+    {
+        int next_node = neighbor.first;
+        int weight = neighbor.second;
+        if (!visited[next_node])
+        {
+            auto [new_distance, new_farthest] = dfs(next_node, graph, visited, distance + weight);
+            if (new_distance > max_distance)
+            {
+                max_distance = new_distance;
+                farthest_node = new_farthest;
+            }
+        }
+    }
+    return {max_distance, farthest_node};
+}
+
+class Solution
+{
+public:
+    bool check(int n, vector<int> &v, long long d, long long k)
+    {
+
+        for (int i = 0; i < n; i++)
+        {
+            if (i + 1 < n)
+            {
+                long long diff = v[i + 1] - v[i];
+                if (diff <= k)
+                {
+                    long long total = diff * (k - diff) + diff * (diff + 1) / 2;
+                    d -= total;
+                }
+                else
+                {
+                    long long total = k * (k + 1) / 2;
+                    d -= total;
+                }
+            }
+            else
+            {
+                long long total = k * (k + 1) / 2;
+                d -= total;
+            }
+
+            if (d <= 0)
+                return true;
+        }
+        return false;
+    }
+    int minimizeTopSpeed(int n, vector<int> &spells, long long trackLength)
+    {
+        long long l = 1, h = 1e9;
+        long long ans = h;
+        while (l <= h)
+        {
+            long long mid = l + (h - l) / 2;
+            if (check(n, spells, trackLength, mid))
+            {
+                ans = min(ans, mid);
+                h = mid - 1;
+            }
+            else
+                l = mid + 1;
+        }
+        return ans;
+    }
+};
+
+struct HashPair
+{
+    template <class T1, class T2>
+    size_t operator()(const pair<T1, T2> &p) const
+    {
+        auto hash1 = hash<T1>{}(p.first);
+        auto hash2 = hash<T2>{}(p.second);
+        return hash1 ^ hash2;
+    }
+};
+
+class Solution
+{
+public:
+    vector<long long> longDrive(int n, vector<vector<int>> &edges, int q, vector<int> &query)
+    {
+        // Create an adjacency list to represent the tree structure
+        vector<vector<pair<int, int>>> adj_list(n + 1);
+        for (const auto &edge : edges)
+        {
+            int u = edge[0];
+            int v = edge[1];
+            int weight = edge[2];
+            adj_list[u].emplace_back(make_pair(v, weight));
+            adj_list[v].emplace_back(make_pair(u, weight));
+        }
+
+        unordered_map<pair<int, int>, int, HashPair> memo;
+        vector<int> result;
+
+        function<int(int, int)> dfs = [&](int node, int parent)
+        {
+            auto key = make_pair(node, parent);
+            if (memo.count(key))
+            {
+                return memo[key];
+            }
+            int max_dist = 0;
+            for (const auto &neighbor : adj_list[node])
+            {
+                int neighbor_node = neighbor.first;
+                int weight = neighbor.second;
+                if (neighbor_node != parent)
+                {
+                    max_dist = max(max_dist, dfs(neighbor_node, node) + weight);
+                }
+            }
+            memo[key] = max_dist;
+            return max_dist;
+        };
+
+        for (int start_city : query)
+        {
+            int max_distance = dfs(start_city, 0);
+            result.push_back(max_distance);
+        }
+
+        return result;
+    }
+};

@@ -921,7 +921,6 @@ int numEnclaves(vector<vector<int>> &grid)
 
 // no of closed islands.......
 
-
 void bfs(int row, int col, vector<vector<int>> &grid, vector<vector<int>> &vis, vector<int> &r, vector<int> &c)
 {
    int n = grid.size(), m = grid[0].size();

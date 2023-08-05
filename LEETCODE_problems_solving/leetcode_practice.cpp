@@ -2300,7 +2300,7 @@ during reversing a linked list -->
    }
    here in this method after the entire loop  terminates --->
    prev = newhead
-   next=newhead->nex
+   next=newhead->next
    curr=NULL
 
    and we return prev as new head pointer...
@@ -3751,11 +3751,39 @@ vector<int> maxScoreIndices(vector<int> &nums)
 }
 
 // maximum path sum binary tree.....
- 
+
 int maxPathSum(TreeNode *root)
 {
 }
 
-
-
-
+void inorder(TreeNode *root, vector<int> &v)
+{
+   if (!root)
+   {
+      return;
+   }
+   inorder(root->left, v);
+   v.push_back(root->val);
+   inorder(root->right, v);
+}
+int findSecondMinimumValue(TreeNode *root)
+{
+   vector<int> ans;
+   inorder(root, ans);
+   sort(ans.begin(), ans.end());
+   int mini = ans[0];
+   int n = ans.size();
+   if (ans[0] == ans[n - 1])
+   {
+      return -1;
+   }
+   for (int i = 0; i < n; i++)
+   {
+      if (mini < ans[i])
+      {
+         mini = ans[i];
+         break;
+      }
+   }
+   return mini;
+}

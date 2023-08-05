@@ -8,7 +8,12 @@
         "sstream": "cpp",
         "regex": "cpp",
         "vector": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "array": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "ranges": "cpp",
+        "span": "cpp"
     },
     "[python]": {
         "editor.defaultFormatter": "ms-python.autopep8"

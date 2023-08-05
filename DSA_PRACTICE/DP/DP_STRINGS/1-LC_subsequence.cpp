@@ -24,8 +24,9 @@ int32_t main()
 }
 
 /*
+
 Approach -->
-if the 2 indexs at both strings have same character then add +1 to our length and reduce both the indexes for the next single recusive call..
+if the 2 indexs at both strings have same character then add +1 to our length and reduce both the indexes for the next single recusive call ..
 
 if (s1[idx1] == s2[idx2])
    ans = 1 + f(idx1 - 1, idx2 - 1, s1, s2);

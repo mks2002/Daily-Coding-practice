@@ -140,31 +140,7 @@ string smallestString(string s)
    }
 }
 
-
 // https://www.codingninjas.com/codestudio/contests/codekaze-round-2-mock-test/8382475/problems/17231?leftPanelTab=0
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 for (int j = 0; j < m; j++)
@@ -226,5 +202,56 @@ for (int j = 0; j < m; j++)
    }
 */
 
-
 // in no of enclaves the 2 individual loops approach give wrong answer but the nested loop approach works in both the questions ....
+
+bool ispossible(int currrow, int currcol, int nextrow, int nextcol, vector<vector<int>> &grid)
+{
+   if (grid[currrow][currcol] == 2)
+      return true;
+   if (grid[currrow][currcol])
+}
+
+int possiblePath(int n, int m, vector<vector<int>> &grid)
+{
+}
+
+const int mod = 1e9 + 7, N = 100000, p = 31;
+int pow_value[100000], hash_value[100001];
+
+void Solution()
+{
+   pow_value[0] = 1;
+   for (int i = 1; i < N; i++)
+      pow_value[i] = (1LL * pow_value[i - 1] * p) % mod;
+}
+
+void compute_hash(string s)
+{
+   for (int i = 0; i < s.size(); i++)
+      hash_value[i + 1] = (hash_value[i] + 1LL * (s[i] - 'a' + 1) * pow_value[i]) % mod;
+}
+
+string helper(string s)
+{
+   int n = s.size() / 2;
+   for (int i = n; i > 0; --i)
+   {
+      int left_half_hash = hash_value[i];
+      int right_half_hash = (hash_value[2 * i] - hash_value[i] + mod) % mod;
+      if ((1LL * left_half_hash * pow_value[i]) % mod == right_half_hash)
+      {
+         string ans = helper(s.substr(0, i));
+         ans += '*' + s.substr(2 * i, s.size());
+         return ans;
+      }
+   }
+   return s;
+}
+
+string secretCipher(string &s)
+{
+   // Code here
+   compute_hash(s);
+   return helper(s);
+}
+

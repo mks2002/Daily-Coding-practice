@@ -99,3 +99,21 @@ struct Node *modifyTheList(struct Node *head)
    }
    return head;
 }
+
+long long findMinDiff(vector<long long> a, long long n, long long m)
+{
+   sort(a.begin(), a.end());
+   int idx = 0;
+   long long firstdiff = a[m - 1] - a[0];
+   if (m < n)
+      idx = m;
+   long long mindiff = 1e12;
+   while (idx < n)
+   {
+      long long currdif = a[idx] - a[idx - m + 1];
+      mindiff = min(currdif, firstdiff);
+      idx++;
+   }
+
+   return mindiff;
+}

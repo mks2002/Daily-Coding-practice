@@ -181,12 +181,8 @@ int main()
     return 0;
 }
 
-
-
-
-
 // Function to Build Tree
-Node *buildTree(string str)
+node *buildTree(string str)
 {
     // Corner Case
     if (str.length() == 0 || str[0] == 'N')
@@ -201,10 +197,10 @@ Node *buildTree(string str)
         ip.push_back(str);
 
     // Create the root of the tree
-    Node *root = new Node(stoi(ip[0]));
+    node *root = new node(stoi(ip[0]));
 
     // Push the root to the queue
-    queue<Node *> queue;
+    queue<node *> queue;
     queue.push(root);
 
     // Starting from the second element
@@ -213,7 +209,7 @@ Node *buildTree(string str)
     {
 
         // Get and remove the front of the queue
-        Node *currNode = queue.front();
+        node *currnode = queue.front();
         queue.pop();
 
         // Get the current node's value from the string
@@ -223,11 +219,11 @@ Node *buildTree(string str)
         if (currVal != "N")
         {
 
-            // Create the left child for the current Node
-            currNode->left = new Node(stoi(currVal));
+            // Create the left child for the current node
+            currnode->left = new node(stoi(currVal));
 
             // Push it to the queue
-            queue.push(currNode->left);
+            queue.push(currnode->left);
         }
 
         // For the right child
@@ -241,10 +237,10 @@ Node *buildTree(string str)
         {
 
             // Create the right child for the current node
-            currNode->right = new Node(stoi(currVal));
+            currnode->right = new node(stoi(currVal));
 
             // Push it to the queue
-            queue.push(currNode->right);
+            queue.push(currnode->right);
         }
         i++;
     }
